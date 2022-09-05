@@ -1,0 +1,95 @@
+<%- include('../../parts/header.ejs') %>
+<%- include('../../parts/navbar.ejs') %>
+<%- include('../../parts/sidebar.ejs') %>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Voucher</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+              <li class="breadcrumb-item"><a href="/voucher">Voucher</a></li>
+              <li class="breadcrumb-item active">Edit</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h3 class="card-title">Edit Voucher <%= voucher.name %></h3>
+                  </div>
+                  <!-- /.card-header -->
+                  <!-- form start -->
+                  <form action="/voucher/edit/<%= voucher._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label for="name">Nama Game</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter nama" value="<%= voucher.name %>" required>
+                      </div>
+                      <div class="form-group">
+                        <label>Kategori</label>
+                        <select class="form-control select2" name="category" required>
+                          <option selected="selected">Pilih kategori</option>
+                          <% categories.forEach(category=>{ %>
+                            <option value="<%= category._id %>"
+                              <% if(category._id.toString() === voucher?.category?._id.toString()) { %>
+                                selected
+                                <% } %>
+                              >
+                              <%= category.name %>
+                            </option>
+                          <%})%>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label>Nominal</label>
+                        <div class="select2-purple">
+                          <select class="form-control select2" multiple="multiple" name="nominals" data-placeholder="Pilih nominal" required>
+                            <% nominals.forEach(nominal=>{ %>
+                              <option value="<%= nominal._id %>"
+                                <% voucher.nominals.forEach(voucherNominal => { %>
+                                  <% if(nominal._id.toString() === voucherNominal._id.toString()) { %>
+                                    selected
+                                    <% } %>
+                                <% }) %>
+                                >
+                                <%= nominal.coinName %> (<%= nominal.coinQuantity %>coins/<%= nominal.price %>)</option>
+                            <%})%>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="image">Gambar Thumbnail</label>
+                        <input type="file" class="form-control-file mb-2" id="image" name="image">
+                        <img src="http://localhost:3000/uploads/<%= voucher.thumbnail %>" id="preview">
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                  </form>
+                </div>
+    
+            </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+  <%- include('../../parts/footer.ejs') %>
+  <%- include('../../parts/js.ejs') %>
